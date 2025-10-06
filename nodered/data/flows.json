@@ -1,0 +1,278 @@
+[
+    {
+        "id": "e34afe1b7241f94d",
+        "type": "tab",
+        "label": "Fluxo 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "b0191d7f8ccfb3bc",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "mosquitto",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "1157d4393590c178",
+        "type": "mongodb4-client",
+        "name": "",
+        "protocol": "mongodb",
+        "hostname": "mongo",
+        "port": "27017",
+        "dbName": "prova",
+        "appName": "",
+        "authSource": "",
+        "authMechanism": "DEFAULT",
+        "tls": false,
+        "tlsCAFile": "",
+        "tlsCertificateKeyFile": "",
+        "tlsInsecure": false,
+        "connectTimeoutMS": "30000",
+        "socketTimeoutMS": "0",
+        "minPoolSize": "0",
+        "maxPoolSize": "100",
+        "maxIdleTimeMS": "0",
+        "uri": "",
+        "advanced": "{}",
+        "uriTabActive": "tab-uri-simple"
+    },
+    {
+        "id": "a91c89b3e1535bf5",
+        "type": "postgreSQLConfig",
+        "name": "postgres",
+        "host": "postgres",
+        "hostFieldType": "str",
+        "port": 5432,
+        "portFieldType": "num",
+        "database": "iot",
+        "databaseFieldType": "str",
+        "ssl": "false",
+        "sslFieldType": "bool",
+        "applicationName": "",
+        "applicationNameType": "str",
+        "max": 10,
+        "maxFieldType": "num",
+        "idle": 1000,
+        "idleFieldType": "num",
+        "connectionTimeout": 10000,
+        "connectionTimeoutFieldType": "num",
+        "user": "admin",
+        "userFieldType": "str",
+        "password": "admin",
+        "passwordFieldType": "str"
+    },
+    {
+        "id": "fd0d930fe569b1c0",
+        "type": "mqtt in",
+        "z": "e34afe1b7241f94d",
+        "name": "Info",
+        "topic": "device/+/info",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "b0191d7f8ccfb3bc",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 70,
+        "y": 120,
+        "wires": [
+            [
+                "53a9a0fd75146759"
+            ]
+        ]
+    },
+    {
+        "id": "53a9a0fd75146759",
+        "type": "uuid",
+        "z": "e34afe1b7241f94d",
+        "uuidVersion": "v4",
+        "namespaceType": "",
+        "namespace": "",
+        "namespaceCustom": "",
+        "name": "",
+        "field": "payload._id",
+        "fieldType": "msg",
+        "x": 290,
+        "y": 120,
+        "wires": [
+            [
+                "70aa8329c244dce3"
+            ]
+        ]
+    },
+    {
+        "id": "70aa8329c244dce3",
+        "type": "function",
+        "z": "e34afe1b7241f94d",
+        "name": "function 1",
+        "func": "const device_id = (msg.topic || '').split(\"/\")[1];\nif(!device_id) return null;\n\nmsg.collection = \"devices\";\nmsg.operation = \"updateOne\";\n\nconst objeto = {\n    $set: {\n        device_id: device_id,\n        model: msg.payload.model || null,\n        firmware: msg.payload.firmware || null,\n        ip_address: msg.payload.ip_address || null,\n        location: msg.payload.location || null,\n        update_at: new Date(),\n        raw: JSON.stringify(msg.payload)\n    }, \n    $setOnInsert: { created_at: new Date(), _id: msg.payload._id  }\n}\n\nmsg.payload = [{ device_id: device_id }, objeto, { upsert: true }];\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 120,
+        "wires": [
+            [
+                "60ece700f32a5733"
+            ]
+        ]
+    },
+    {
+        "id": "60ece700f32a5733",
+        "type": "mongodb4",
+        "z": "e34afe1b7241f94d",
+        "clientNode": "1157d4393590c178",
+        "mode": "collection",
+        "collection": "",
+        "operation": "",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 670,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a5c7f77747043c52",
+        "type": "mqtt in",
+        "z": "e34afe1b7241f94d",
+        "name": "Status",
+        "topic": "device/+/status/temperatura",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "b0191d7f8ccfb3bc",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 70,
+        "y": 200,
+        "wires": [
+            [
+                "48a3b73e582c5fba"
+            ]
+        ]
+    },
+    {
+        "id": "48a3b73e582c5fba",
+        "type": "uuid",
+        "z": "e34afe1b7241f94d",
+        "uuidVersion": "v4",
+        "namespaceType": "",
+        "namespace": "",
+        "namespaceCustom": "",
+        "name": "",
+        "field": "payload._id",
+        "fieldType": "msg",
+        "x": 210,
+        "y": 200,
+        "wires": [
+            [
+                "f0475f652c2d1ba4"
+            ]
+        ]
+    },
+    {
+        "id": "f0475f652c2d1ba4",
+        "type": "function",
+        "z": "e34afe1b7241f94d",
+        "name": "function 2",
+        "func": "const device_id = (msg.topic || '').split(\"/\")[1];\nif(!device_id) return null;\n\nmsg.collection = \"alert\";\nmsg.operation = \"insertOne\";\n\nconst objeto = {\n    _id: msg.payload._id,  \n    device_id: device_id,\n    data: {\n        temperature: msg.payload.data.temperature,\n        unit: msg.payload.data.unit\n    },        \n    created_at: new Date(),\n    update_at: new Date(),\n    raw: JSON.stringify(msg.payload)\n}\nconst status = msg.payload.data.temperature < 5 ? \"off\" : \"on\"\nconst obj = {\n    topic: `device/${device_id}/cmd/light`,\n    payload: {\n        device_id: device_id,\n        led: status\n    }\n}\nvar postgres = {};\nif (status == \"on\"){\n    postgres.query = `INSERT INTO alert (id, created_at, temperature,topic, unit, raw) VALUES ($1, $2, $3, $4, $5, $6)`;\n    postgres.params = [\n        msg.payload._id,  \n        new Date(),\n        msg.payload.data.temperature,\n        msg.payload.data.unit,\n        msg.topic,\n        JSON.stringify(msg.payload)\n    ]\n} else {\n    postgres = null\n}\n\nmsg.payload = objeto\nreturn [msg, obj, postgres || null];",
+        "outputs": 3,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 200,
+        "wires": [
+            [
+                "60ece700f32a5733"
+            ],
+            [
+                "b852f10d9ed2fcea"
+            ],
+            [
+                "e2f852238382b457"
+            ]
+        ]
+    },
+    {
+        "id": "b852f10d9ed2fcea",
+        "type": "mqtt out",
+        "z": "e34afe1b7241f94d",
+        "name": "",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "b0191d7f8ccfb3bc",
+        "x": 650,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "e2f852238382b457",
+        "type": "postgresql",
+        "z": "e34afe1b7241f94d",
+        "name": "",
+        "query": "SELECT * FROM ;\n\n\n",
+        "postgreSQLConfig": "a91c89b3e1535bf5",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 670,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6bed635727eba804",
+        "type": "comment",
+        "z": "e34afe1b7241f94d",
+        "name": " CREATE TABLE alert",
+        "info": "\n-- CREATE TABLE alert (\n--     id UUID PRIMARY KEY,\n--     temperature NUMERIC(5,2),         \n--     topic TEXT NOT NULL,               \n--     unit TEXT,                         \n--     raw JSONB,                         \n--     created_at TIMESTAMPTZ NOT NULL DEFAULT now()\n-- );\n",
+        "x": 120,
+        "y": 320,
+        "wires": []
+    }
+]

@@ -102,27 +102,6 @@
         "passwordFieldType": "str"
     },
     {
-        "id": "fc3856078f0dd452",
-        "type": "mqtt in",
-        "z": "c073de9ba7ed9db1",
-        "name": "Device Info",
-        "topic": "device/+/info",
-        "qos": "1",
-        "datatype": "auto-detect",
-        "broker": "dab3ad35f7fbabda",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 160,
-        "y": 240,
-        "wires": [
-            [
-                "cb1462e0934a9a73"
-            ]
-        ]
-    },
-    {
         "id": "de1a752d8ca4a0e6",
         "type": "function",
         "z": "c073de9ba7ed9db1",
@@ -139,7 +118,7 @@
         "wires": [
             [
                 "e2f46f02fa6dcced",
-                "8555d0ce760e7f85"
+                "0cc3267d4b3ffd77"
             ]
         ]
     },
@@ -217,7 +196,8 @@
         "y": 240,
         "wires": [
             [
-                "de1a752d8ca4a0e6"
+                "de1a752d8ca4a0e6",
+                "0cc3267d4b3ffd77"
             ]
         ]
     },
@@ -341,8 +321,7 @@
         "y": 580,
         "wires": [
             [
-                "26e7f5b97b3a8bf8",
-                "0cc3267d4b3ffd77"
+                "26e7f5b97b3a8bf8"
             ]
         ]
     },
@@ -403,8 +382,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 360,
-        "y": 660,
+        "x": 860,
+        "y": 160,
         "wires": []
     },
     {
@@ -414,7 +393,7 @@
         "name": "WebSocket",
         "server": "955b0537cc1cd302",
         "client": "",
-        "x": 1250,
+        "x": 1210,
         "y": 240,
         "wires": []
     },
@@ -453,7 +432,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "{\"_id\":\"123123\",\"createAt\":\"10-10-2025\",\"temperature\":5,\"humidity\":10,\"topic\":\"device/teste\"}",
+        "payload": "{\"_id\":\"58c29006-c345-420a-a266-84940ecfa5a5\",\"createAt\":\"10-10-2025\",\"temperature\":5,\"humidity\":10,\"topic\":\"device/teste\"}",
         "payloadType": "json",
         "x": 130,
         "y": 820,
@@ -497,6 +476,27 @@
         "y": 820,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "fc3856078f0dd452",
+        "type": "mqtt in",
+        "z": "c073de9ba7ed9db1",
+        "name": "Device Info",
+        "topic": "device/+/info",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "dab3ad35f7fbabda",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 240,
+        "wires": [
+            [
+                "cb1462e0934a9a73"
+            ]
         ]
     },
     {
